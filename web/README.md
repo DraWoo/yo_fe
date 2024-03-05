@@ -1,25 +1,31 @@
-# Spring Security와 JWT 통합
+# YO Frontend Vite Application
 
-이 프로젝트는 Spring Boot, Spring Security, JWT(Json Web Token)을 사용하여 RESTful API를 보호하는 방법을 보여줍니다.
+이 프로젝트는 Vite와 Vue 3를 기반으로 구축된 프론트엔드 애플리케이션입니다. 개발의 효율성을 높이고 최신 웹 기술을 활용하기 위해 여러 툴과 라이브러리를 통합했습니다.
 
-## 기능
+## 주요 기능
 
-- 사용자 로그인 및 JWT 토큰 발급
-- JWT를 사용한 API 접근 인증
-- 사용자 등록 및 정보 관리
+- 사용자 인터페이스 구축을 위한 Vue 3
+- 상태 관리를 위한 Pinia
+- API 요청을 위한 Axios
+- 라우팅을 위한 Vue Router
 
 ## 기술 스택
 
-- Spring Boot
-- Spring Security
-- JWT
-- H2 Database (임베디드 SQL 데이터베이스)
-- Maven
+## 기타 스크립트
+- eslint: ESLint를 실행하여 코드 문법과 스타일을 검사합니다.
+- postcss: CSS 변환을 위한 PostCSS를 실행합니다.
 
-## 시작하기
+## 중요 의존성
+- vue: Vue.js 프레임워크.
+- axios: HTTP 요청을 위한 라이브러리.
+- pinia: Vue 애플리케이션을 위한 상태 관리 라이브러리.
+- vue-router: Vue 애플리케이션을 위한 라우터.
+- tailwindcss: 유틸리티 우선 CSS 프레임워크.
+- eslint: 코드 품질과 스타일을 유지하기 위한 도구.
 
-프로젝트를 로컬 시스템으로 클론하려면 다음 명령어를 사용합니다:
+## 프로젝트 설치 및 실행
 
-bash
-git clone https://github.com/yourusername/Spring-Security-JWT-Integration.git
-cd Spring-Security-JWT-Integration
+1. 저장소를 클론하거나 다운로드합니다.
+2. 다음 명령어로 필요한 의존성을 설치합니다:
+   ```sh
+   npm install

@@ -1,6 +1,9 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 
+//환경 변수에서 API로 경로 가져오기
+const baseUrl = `${import.meta.env.VITE_API_PATH}`
+
 export const useAuthStore = defineStore('auth', {
     state: () => ({
         token: null,
@@ -16,12 +19,13 @@ export const useAuthStore = defineStore('auth', {
          */
         async login(username, password) {
             try{
-                const res = await axios.post(`$(baseUrl)/login`,{username, password})
+                const res = await axios.post(`${baseUrl}/login`,{username, password})
                 const { code, payload } =res.data
 
                 if(code === 'succeed' && payload){
-                    this.user = payload
-                    localStorage.setItem('user', JSON.stringify(this.user))
+                    this.token = payload.token
+                    this.isAuthenticated = true
+                    localStorage.setItem('token', this.token)
                     return payload
                 }else {
                     //서버로 부터 응답 실패
