@@ -1,12 +1,12 @@
 @import '@fontsource/noto-sans-kr/korean-300.css';
 @import '@fontsource/noto-sans-kr/korean-400.css';
 @import '@fontsource/noto-sans-kr/korean-700.css';
-/* @import 'splitpanes/dist/splitpanes.css'; */
-/* @import 'swiper/swiper-bundle.css'; */
-/* @import 'tippy.js/dist/tippy.css'; */
-/* @import '@vuepic/vue-datepicker/dist/main.css'; */
-/* @import 'vue3-toastify/dist/index.css'; */
-/* @import '@vueup/vue-quill/dist/vue-quill.snow.css'; */
+/* @import 'splitpanes/dist/splitpanes.css';
+@import 'swiper/swiper-bundle.css';
+@import 'tippy.js/dist/tippy.css';
+@import '@vuepic/vue-datepicker/dist/main.css';
+@import 'vue3-toastify/dist/index.css';
+@import '@vueup/vue-quill/dist/vue-quill.snow.css'; */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -15,46 +15,132 @@
   html,
   body,
   #app {
+    @apply h-full text-[#212121] text-[14px];
     /*font-family: 'SF Pro Display', Avenir, Helvetica, Arial, sans-serif;*/
     font-family: 'Noto Sans KR', 'SF Pro Text', '-apple-system', 'Roboto', 'Arial', 'sans-serif';
   }
 
+  label {
+    @apply cursor-pointer flex flex-wrap gap-[8px] items-center min-w-[20px];
+  }
+
+  input[type='text'],
+  input[type='number'],
+  input[type='password'] {
+    @apply h-[44px] py-0 px-[16px] border border-[#E7EAEF] focus:border-[#212121] focus:outline-none rounded-[8px] text-[14px] placeholder:text-[#BCBCBC];
+  }
+
+  input[type='number'] {
+    @apply pr-0;
+  }
+
+  input:disabled {
+    /* @apply bg-[#f1f2f6] text-[#b5b5b5]; */
+    @apply bg-[#f5f5f5] border-[#F1F2F6] text-[#b6b6b6];
+  }
 
   /*input::-webkit-input-placeholder {*/
   /*  line-height: 1;*/
   /*}*/
+
+  textarea {
+    @apply h-[100px] w-full p-[16px] border border-[#E7EAEF] focus:border-[#212121] focus:outline-none rounded-[8px] text-[14px] resize-none;
+  }
+
+  h1,
+  h2 {
+    @apply text-[32px] font-bold text-black;
+  }
 }
 
 @layer components {
   input[type='text'].xs-input,
   input[type='number'].xs-input,
+  input[type='password'].xs-input {
+    @apply h-[32px] leading-[32px] py-0 px-[12px] border border-[#E7EAEF] focus:border-[#212121] focus:outline-none rounded-[4px] text-[12px];
+  }
 
   input[type='text'].xs-input-clear,
   input[type='number'].xs-input-clear,
+  input[type='password'].xs-input-clear {
+    @apply h-[30px] leading-[30px] py-0 px-0 border-none;
+  }
 
   input[type='text'].xs-input-maxlength,
   input[type='number'].xs-input-maxlength,
+  input[type='password'].xs-input-maxlength {
+    @apply pr-[60px];
+  }
 
   input[type='text'].xs-input-search,
   input[type='number'].xs-input-search,
+  input[type='password'].xs-input-search {
+    @apply pl-[32px];
+  }
 
   input[type='text'].xs-input-error,
   input[type='number'].xs-input-error,
+  input[type='password'].xs-input-error {
+    @apply border-red-500 focus:border-red-500 text-red-500;
+  }
 
   input[type='number'].xs-input,
   input[type='number'].xs-input-clear,
   input[type='number'].xs-input-maxlength,
   input[type='number'].xs-input-search,
+  input[type='number'].xs-input-error {
+    @apply pr-0;
+  }
+
+  label input[type='checkbox'] {
+    @apply hidden;
+  }
+
+  label span.checkbox {
+    @apply h-[16px] w-[16px] rounded-[4px] border border-[#E7EAEF];
+  }
+
+  label input[type='checkbox']:checked ~ span.checkbox {
+    @apply flex items-center justify-center bg-[#FEEC00] border-[#FEEC00];
+  }
+
+  label input[disabled]:checked ~ span.checkbox {
+    @apply bg-[#f5f5f5] border-[#e5e7eb];
+  }
+
+  label input[type='checkbox']:checked ~ span.checkbox:before {
+    @apply w-[8px] h-[7px] ml-[2px];
+    content: ' ';
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iOCIgaGVpZ2h0PSI4IiB2aWV3Qm94PSIwIDAgOCA4IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cGF0aCBkPSJNMS4yMTg4MSA0LjM3NDc4QzEuMDgxNzUgNC4yNDM1OCAwLjkwMzE0NiA0LjE3MjQgMC43MTg4MzIgNC4xNzU1MUMwLjUzNDUxNyA0LjE3ODYxIDAuMzU4MTIzIDQuMjU1NzkgMC4yMjUwMzMgNC4zOTE1NEMwLjA5MTk0MzUgNC41MjcyOSAwLjAxMjAwMjcgNC43MTE1OSAwLjAwMTI0NTYxIDQuOTA3NDZDLTAuMDA5NTExNDcgNS4xMDMzMyAwLjA0OTcxMDkgNS4yOTYyOCAwLjE2NzAzNCA1LjQ0NzYxTDEuNzg4NTMgNy4yNTg5OUMxLjg1NjQxIDcuMzM0NzkgMS45Mzc5OSA3LjM5NTIxIDIuMDI4MzYgNy40MzY2MkMyLjExODczIDcuNDc4MDMgMi4yMTYwMyA3LjQ5OTU5IDIuMzE0NDEgNy40OTk5OUMyLjQxMjI4IDcuNTAwNiAyLjUwOTI2IDcuNDgwMjYgMi41OTk2IDcuNDQwMkMyLjY4OTk0IDcuNDAwMTMgMi43NzE4IDcuMzQxMTUgMi44NDAzIDcuMjY2NzZMNy43OTI0MyAxLjgyNDg2QzcuODU5NTcgMS43NTEzNiA3LjkxMjQ1IDEuNjY0NDkgNy45NDgwNSAxLjU2OTI0QzcuOTgzNjYgMS40NzM5OCA4LjAwMTI4IDEuMzcyMTkgNy45OTk5MyAxLjI2OTY4QzcuOTk4NTcgMS4xNjcxNyA3Ljk3ODI2IDEuMDY1OTUgNy45NDAxNSAwLjk3MTc5NEM3LjkwMjA0IDAuODc3NjQxIDcuODQ2ODggMC43OTIzOTkgNy43Nzc4MiAwLjcyMDkzNUM3LjcwODc2IDAuNjQ5NDcxIDcuNjI3MTUgMC41OTMxODQgNy41Mzc2NSAwLjU1NTI4OUM3LjQ0ODE1IDAuNTE3Mzk1IDcuMzUyNTIgMC40OTg2MzQgNy4yNTYyMSAwLjUwMDA3N0M3LjE1OTkgMC41MDE1MjEgNy4wNjQ4IDAuNTIzMTQyIDYuOTc2MzQgMC41NjM3MDRDNi44ODc4OCAwLjYwNDI2NiA2LjgwNzc5IDAuNjYyOTc3IDYuNzQwNjUgMC43MzY0ODNMMi4zMjE3MiA1LjYwMzFMMS4yMTg4MSA0LjM3NDc4WiIgZmlsbD0iYmxhY2siLz4KPC9zdmc+Cg==');
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
 
   label input[disabled]:checked ~ span.checkbox:before {
     opacity: 0.3;
   }
-  .shadow-outline {
-    @apply shadow-outline;
+
+  label input[type='radio'] {
+    @apply hidden;
   }
-  .shadow-outline:focus {
-    @apply ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60;
+
+  label span.radio {
+    @apply h-[16px] w-[16px] rounded-[2em] border border-[#E7EAEF];
   }
+
+  label input[type='radio']:checked ~ span.radio {
+    @apply flex items-center justify-center bg-[#FEEC00] border-[#FEEC00];
+  }
+
+  label input[type='radio']:checked ~ span.radio:before {
+    @apply w-[8px] h-[8px] bg-white rounded-[2em];
+    content: ' ';
+  }
+
+  input.is-invalid {
+    @apply border-red-500;
+  }
+
   .scrollbar::-webkit-scrollbar {
     width: 0.65rem;
   }
@@ -69,29 +155,15 @@
   .overlay {
     overflow: overlay;
   }
-  /* 240305/yo/커스텀 css 추가 */
-  .login-form {
-    @apply bg-white p-8 border border-gray-300 rounded-lg shadow-md;
-  }
 
-  .login-input {
-    @apply w-full p-3 mt-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300;
+  input[type='text'].xs-input-icon {
+    @apply h-[32px] leading-[32px] py-[0.3rem] pr-[0.5rem] pl-[1.8rem] border border-[#E7EAEF] focus:border-[#212121] focus:outline-none rounded-[6px] text-[12px];
   }
-
-  .login-button {
-  @apply mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-300;
-  }
-    /* 추가적인 focus 상태의 스타일을 여기에 작성 */
-
-  .login-icon {
-    @apply inline-block h-6 w-6 text-gray-500;
-  }
-
 }
 
 @layer utilities {
   /** splitpanes */
-  .default-theme.splitpanes--vertical .splitpanes__pane {
+  /* .default-theme.splitpanes--vertical .splitpanes__pane {
     transition: none;
     overflow: inherit;
   }
@@ -119,7 +191,7 @@
   .default-theme.splitpanes--vertical > .splitpanes__splitter:after,
   .default-theme .splitpanes--vertical > .splitpanes__splitter:after {
     display: none;
-  }
+  } */
 
   /* swiper */
   .swiper {
@@ -170,6 +242,30 @@
     cursor: pointer;
   }
 
+  /* @headlessui/vue */
+  .listbox {
+    @apply relative;
+  }
+  .listbox-disabled {
+    @apply bg-[#f5f5f5] border-[#F1F2F6] text-[#b6b6b6];
+  }
+  .listbox-button {
+    @apply flex items-center border border-[#E5E7EC] w-full h-[32px] pl-[10px] rounded-[6px] text-left text-[12px] truncate;
+  }
+  .listbox-button[data-headlessui-state='disabled'] {
+    @apply bg-[#f6f5f5] text-[#b5b5b5];
+  }
+  .listbox-button.open {
+    @apply border-[#212121];
+  }
+  .listbox-options {
+    @apply absolute z-10 left-0 mt-[5px] flex flex-wrap w-full p-[5px] bg-white rounded-[8px] text-[#212121] border border-[rgb(241,242,246)] overflow-x-hidden max-h-60 overflow-y-auto;
+    box-shadow:
+      0 0 2px #d3e0ed,
+      0 6px 11px rgba(27, 29, 31, 0.05),
+      0 10px 15px rgba(27, 29, 31, 0.05),
+      0 0 1px rgba(27, 29, 31, 0.25);
+  }
   .listbox-options::-webkit-scrollbar {
     width: 0.65rem;
   }
@@ -181,6 +277,12 @@
     border: 0.15rem solid transparent;
   }
 
+  .listbox-options.pos-top {
+    @apply bottom-[100%] mb-[5px];
+  }
+  .listbox-option {
+    @apply flex items-center w-full h-[36px] px-[16px] hover:bg-[#F5F5F7] rounded-[8px] text-[12px] cursor-pointer;
+  }
   .listbox-option.hidden {
     display: none;
   }
@@ -194,8 +296,21 @@
 }
 
 .ql-toolbar.ql-snow {
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
-    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    'Noto Sans',
+    sans-serif,
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Segoe UI Symbol',
+    'Noto Color Emoji';
   padding: 12px 8px;
   background-color: #efefef;
   border: none;
@@ -203,8 +318,21 @@
 
 .ql-container.ql-snow {
   border: none;
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji',
-    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  font-family:
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    'Noto Sans',
+    sans-serif,
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Segoe UI Symbol',
+    'Noto Color Emoji';
 }
 
 /* vue3datepicker */
@@ -422,6 +550,10 @@
   border-top: 1px solid var(--fc-border-color) !important;
 }
 
+/* 오늘 날짜 배경색 */
+.fc-day-today {
+  /* background-color: rgba(254, 236, 0, 0.3) !important; */
+}
 
 .fc-day-sun {
   color: #f24822;
