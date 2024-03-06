@@ -43,7 +43,9 @@ async function onSubmit() {
           </span>
         </div>
       </div>
-      <button type="submit" class="login-button">로그인</button>
+      <button type="submit" class="login-button bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        로그인
+      </button>
     </form>
   </div>
 </template>
