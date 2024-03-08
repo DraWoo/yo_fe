@@ -10,12 +10,14 @@ export const useAuthStore = defineStore('auth', {
   }),
 
   actions: {
+
     /**
      * 로그인 (token)
      * @param {String} username 사용자 아이디
      * @param {String} password 사용자 패스워드
      * @return {Promise<Object>} 로그인 성공 시 사용자 정보(payload)반환, 실패 시 에러 객체 반환
      */
+
     //localhost:9010/api/auth/login
     async login(username, password) {
       console.log('로그인 시도: ', { username, password })
@@ -42,23 +44,31 @@ export const useAuthStore = defineStore('auth', {
         throw error.res ? error.res.data : new Error('Network error')
       }
     },
-    async registerUser(username, password){
+
+    /**
+     * 회원가입 (username,password)
+     * @param {String} username 사용자 아이디
+     * @param {String} password 사용자 패스워드
+     * @return {Promise<Object>} 회원가입 성공 시 사용자 정보(payload)반환, 실패 시 에러 객체 반환
+     */
+    async registerUser(username, password) {
+      console.log('회원가입 요청 시작:', username)
       try {
-        const res = await axios.post(`${baseUrl}/auth/signup`,{
+        const res = await axios.post(`${baseUrl}/auth/signup`, {
           username,
           password
-        })
-        const {code, payload } = res.data
-        if(code === 'succeed' && payload){
-          console.log('회원가입 성공: ', payload)
+        });
+        if (res.status === 200) {
+          console.log('회원가입 성공:', res.data)
           alert('회원가입에 성공하였습니다.')
-          return true// 회원 가입 성공 반환
+          return true;
         } else {
+          console.log('회원가입 실패:', res.data.message)
           throw new Error(res.data.message || '회원가입에 실패했습니다.')
         }
-      } catch (error) {
-        console.error('회원가입 에러:', error);
-        throw error;
+      } catch (err) {
+        console.error('회원가입 에러:', err.response.data)
+        alert(err.response.data || "회원가입 중 문제가 발생했습니다.")
       }
     },
   }
