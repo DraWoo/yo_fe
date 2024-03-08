@@ -19,7 +19,6 @@
     font-family: 'Noto Sans KR', 'SF Pro Text', '-apple-system', 'Roboto', 'Arial', 'sans-serif';
   }
 
-
   /*input::-webkit-input-placeholder {*/
   /*  line-height: 1;*/
   /*}*/
@@ -28,24 +27,18 @@
 @layer components {
   input[type='text'].xs-input,
   input[type='number'].xs-input,
-
   input[type='text'].xs-input-clear,
   input[type='number'].xs-input-clear,
-
   input[type='text'].xs-input-maxlength,
   input[type='number'].xs-input-maxlength,
-
   input[type='text'].xs-input-search,
   input[type='number'].xs-input-search,
-
   input[type='text'].xs-input-error,
   input[type='number'].xs-input-error,
-
   input[type='number'].xs-input,
   input[type='number'].xs-input-clear,
   input[type='number'].xs-input-maxlength,
   input[type='number'].xs-input-search,
-
   label input[disabled]:checked ~ span.checkbox:before {
     opacity: 0.3;
   }
@@ -79,14 +72,13 @@
   }
 
   .login-button {
-  @apply mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-300;
+    @apply mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-300;
   }
-    /* 추가적인 focus 상태의 스타일을 여기에 작성 */
+  /* 추가적인 focus 상태의 스타일을 여기에 작성 */
 
   .login-icon {
     @apply inline-block h-6 w-6 text-gray-500;
   }
-
 }
 
 @layer utilities {
@@ -421,7 +413,6 @@
   border-right: 1px solid var(--fc-border-color) !important;
   border-top: 1px solid var(--fc-border-color) !important;
 }
-
 
 .fc-day-sun {
   color: #f24822;
