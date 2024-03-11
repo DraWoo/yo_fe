@@ -27,7 +27,13 @@ const routes = [
     component: () => import('@/views/HomeView.vue'),
     meta: { requiresAuth: true },
   },
-  // 추가적인 라우트 설정
+  {
+    path: '/logout',
+    name: 'Logout',
+    component: () => import('@/views/LogoutView.vue'),
+    meta: { requiresAuth: true },
+  },
+  
 ];
 
 export const router = createRouter({
@@ -39,7 +45,7 @@ export const router = createRouter({
 router.beforeEach(async (to) => {
   const publicPages = [
     '/signup',
-    '/welcome',
+    '/home',
     '/login',
     '/logout',
     '/privacy',

@@ -10,42 +10,37 @@
   html,
   body,
   #app {
-    font-family: "Noto Sans KR", "SF Pro Text", "-apple-system", "Roboto", "Arial", "sans-serif";
-    @apply h-full text-[#212121] text-[14px];
+    @apply text-primary h-full text-[14px] font-sans;
   }
-  h1,
-  h2 {
-    @apply text-[32px] font-bold text-black;
+  h1 {
+    @apply text-6xl font-bold text-primary;
   }
-
   input[type="text"],
   input[type="password"] {
-    @apply h-[44px] px-[16px] border border-[#e7eaef] focus:border-[#212121] rounded-[8px] text-[14px] placeholder:text-[#bcbcbc];
+    @apply h-11 px-4 border-2 border-secondary focus:border-primary rounded-lg text-base placeholder-secondary;
   }
-
-  .signup-container {
-    @apply flex flex-col items-center justify-center min-h-screen;
-  }
-
-  .signup-form {
-    @apply w-full max-w-xs p-4 bg-white rounded-lg shadow-md;
-  }
-
-  label {
-    @apply block mb-2 text-sm font-bold text-gray-700;
-  }
-
   .btn-primary {
-    @apply mt-4 bg-yellow-500 text-white font-bold py-2 px-4 rounded hover:bg-yellow-600;
+    @apply bg-button-blue py-2 px-4 rounded text-white font-bold hover:bg-button-blue-hover;
   }
 }
 
 @layer components {
-  .input-text {
-    @apply mb-3;
+  .board-container {
+    @apply max-w-6xl mx-auto mt-10 p-6 bg-white shadow rounded-lg;
   }
-
-  .input-label {
-    @apply mb-1 text-gray-700;
+  .post-item {
+    @apply my-5 p-4 border-b border-secondary;
+  }
+  .post-title {
+    @apply text-lg font-bold;
+  }
+  .post-content {
+    @apply my-2 text-primary;
+  }
+  .post-meta {
+    @apply text-sm text-gray-500;
+  }
+  .logout-button {
+    @apply py-2 px-4 ml-1 bg-orange-500 text-white rounded hover:bg-orange-700;
   }
 }

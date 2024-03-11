@@ -8,6 +8,17 @@ export const useAuthStore = defineStore('auth', {
     token: null,
     isAuthenticated: false
   }),
+  // getters는 계산된 상태를 반환하는 함수들의 집합
+  //스토어 상태에 기반하여 동적으로 정보를 제공하며, Vue 컴포넌트 내에서 반응형 데이터처럼 사용
+  getters:{
+    //메인 페이지 경로를 반환하는 getter
+    getUserMainPage(state){
+      //로그인 인증 => isAuthenticated => true 면 homeViesw
+      //로그인 실패 => isAuthenticated => false 면 login
+      return state.isAuthenticated ? '/home' : '/login'
+    }
+
+  },
 
   actions: {
 
@@ -30,9 +41,11 @@ export const useAuthStore = defineStore('auth', {
         const { code, payload } = res.data
 
         if (code === 'succeed' && payload) {
-          this.token = payload.token
+          //응답데이터 토큰값 jwt
+          this.token = payload.jwt
           this.isAuthenticated = true
           localStorage.setItem('token', this.token)
+          console.log('토큰 저장', this.token)
           return payload
         } else {
           //서버로 부터 응답 실패
@@ -44,6 +57,7 @@ export const useAuthStore = defineStore('auth', {
         throw error.res ? error.res.data : new Error('Network error')
       }
     },
+
 
     /**
      * 회원가입 (username,password)
@@ -70,6 +84,19 @@ export const useAuthStore = defineStore('auth', {
         console.error('회원가입 에러:', err.response.data)
         alert(err.response.data || "회원가입 중 문제가 발생했습니다.")
       }
+    },
+
+    /**
+     * 로그아웃 
+     * 사용자의 localStorage에서 토큰을 제거하고, 사용자 인증 상태 업데이트
+     * 로그아웃이 성공하면, 사용자를 로그인 페이지로 리다이렉트
+     */
+    async logout(){
+      //토큰 제거와 인증 상태 업데이트 
+      console.log('토큰 확인:', localStorage.getItem('token'))
+      localStorage.removeItem('token')
+      console.log('토큰 삭제 완료:', localStorage.getItem('token'))
+      this.isAuthenticated = false
     },
   }
 })

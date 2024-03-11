@@ -48,6 +48,7 @@ async function onSubmit(values, { setErrors }) {
     await $authStore.login(values.username, values.password)
     console.log('🔑 로그인 성공! 메인 페이지로 이동합니다.'); // 성공 로그
     await router.push($authStore.getUserMainPage)
+    console.log('페이지 이동 완료')
   } catch (error) {
     if (setErrors) {
       setErrors({ apiError: error })
@@ -65,12 +66,6 @@ function initView() {
   // 로그인 상태면 메인 으로 이동
   if ($authStore.user) router.push($authStore.getUserMainPage)
 }
-// onMounted(() => {
-//   if ($authStore.user) {
-//     console.log('🔄 이미 로그인 상태입니다. 메인 페이지로 이동합니다.'); // 상태 확인 로그
-//     router.push($authStore.getUserMainPage)
-//   }
-// })
 onMounted(initView)
 </script>
 
