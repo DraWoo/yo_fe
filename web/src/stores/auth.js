@@ -6,13 +6,13 @@ const baseUrl = `${import.meta.env.VITE_API_PATH}`
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     token: null,
-    isAuthenticated: false
+    isAuthenticated: false //상태 변수 => 사용자가 로그인했는지 여부를 나타탬
   }),
   // getters는 계산된 상태를 반환하는 함수들의 집합
   //스토어 상태에 기반하여 동적으로 정보를 제공하며, Vue 컴포넌트 내에서 반응형 데이터처럼 사용
-  getters:{
+  getters: {
     //메인 페이지 경로를 반환하는 getter
-    getUserMainPage(state){
+    getUserMainPage(state) {
       //로그인 인증 => isAuthenticated => true 면 homeViesw
       //로그인 실패 => isAuthenticated => false 면 login
       return state.isAuthenticated ? '/home' : '/login'
@@ -91,7 +91,7 @@ export const useAuthStore = defineStore('auth', {
      * 사용자의 localStorage에서 토큰을 제거하고, 사용자 인증 상태 업데이트
      * 로그아웃이 성공하면, 사용자를 로그인 페이지로 리다이렉트
      */
-    async logout(){
+    async logout() {
       //토큰 제거와 인증 상태 업데이트 
       console.log('토큰 확인:', localStorage.getItem('token'))
       localStorage.removeItem('token')

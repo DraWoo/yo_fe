@@ -13,6 +13,10 @@ const handleLogout = async () => {
     await $authStore.logout()
     router.push('/login')
 }
+//게시글 작성
+const handleCreatePost = () => {
+  router.push('/write')
+}
 // 컴포넌트 마운트 시 데이터 로드
 onMounted(() => {
   // TODO: 서버에서 게시글 데이터를 불러오는 로직 구현
@@ -42,15 +46,19 @@ onMounted(() => {
 <template>
     <div class="container mx-auto p-6 bg-white shadow-lg rounded-lg mt-10">
       <h1 class="text-3xl font-bold text-center mb-6">YO BBS</h1>
-      <div class="mb-4 flex justify-end">
-        <input 
-          type="text" 
-          placeholder="검색어를 입력해주세요."
-          class="border rounded py-2 px-4 mr-2"
-        />
-        <!-- <button class="py-2 px-4 bg-blue-500 text-white rounded">검색</button> -->
-        <button class="py-2 px-4 bg-blue-500 text-white rounded">검색</button>
-        <button class="logout-button" @click="handleLogout">로그아웃</button>
+      <div class="my-4 flex justify-between">
+        <button class="py-2 px-4 bg-blue-500 text-white rounded" @click="handleCreatePost">
+          작성
+        </button>
+        <div>
+          <input 
+            type="text" 
+            placeholder="검색어를 입력해주세요."
+            class="border rounded py-2 px-4 mr-2"
+          />
+          <button class="py-2 px-4 bg-blue-500 text-white rounded">검색</button>
+          <button class="logout-button" @click="handleLogout">로그아웃</button>
+        </div>
       </div>
       <div class="overflow-x-auto">
         <table class="min-w-full">
@@ -58,20 +66,19 @@ onMounted(() => {
             <tr>
               <th class="border-b px-6 py-4 text-left">번호</th>
               <th class="border-b px-6 py-4 text-left">제목</th>
-              <th class="border-b px-6 py-4 text-left">이름</th>
+              <!-- <th class="border-b px-6 py-4 text-left">이름</th> -->
               <th class="border-b px-6 py-4 text-left">아이디</th>
               <th class="border-b px-6 py-4 text-left">작성일</th>
               <th class="border-b px-6 py-4 text-left">조회수</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="post in posts" :key="post.id">
-              <td class="border-b px-6 py-4">{{ post.id }}</td>
-              <td class="border-b px-6 py-4">{{ post.title }}</td>
-              <td class="border-b px-6 py-4">{{ post.user.name }}</td>
-              <td class="border-b px-6 py-4">{{ post.user.id }}</td>
-              <td class="border-b px-6 py-4">{{ post.createdAt }}</td>
-              <td class="border-b px-6 py-4">{{ post.viewCount }}</td>
+            <tr v-for="post in posts" :key="post.id" class="my-4">
+              <td class="border-b px-6 py-6">{{ post.id }}</td>
+              <td class="border-b px-6 py-6">{{ post.title }}</td>
+              <td class="border-b px-6 py-6">{{ post.user.id }}</td>
+              <td class="border-b px-6 py-6">{{ post.createdAt }}</td>
+              <td class="border-b px-6 py-6">{{ post.viewCount }}</td>
             </tr>
           </tbody>
         </table>

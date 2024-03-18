@@ -6,8 +6,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '@/stores/index.js';
 
-//동적 import를 사용하여 필요한 component를 불러옴
 
+//동적 import를 사용하여 필요한 component를 불러옴
+//각 라우트의 메타 데이터(meta)를 사용하여 페이지별로 인증 여부를 결정
 const routes = [
   {
     path: '/login',
@@ -31,32 +32,36 @@ const routes = [
     path: '/logout',
     name: 'Logout',
     component: () => import('@/views/LogoutView.vue'),
+    meta: { requiresAuth: false },
+  },
+  {
+    path: '/write',
+    name: 'Write',
+    component: () => import('@/views/CreatePostView.vue')
+      .catch((error) => {
+        console.error('Failed to load CreatePostView component', error);
+      }),
     meta: { requiresAuth: true },
   },
-  
+
 ];
 
 export const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
 });
 
-// 라우터 가드를 설정하여 인증이 필요한 페이지에 접근하기 전에 인증 상태를 확인합니다.
-router.beforeEach(async (to) => {
-  const publicPages = [
-    '/signup',
-    '/home',
-    '/login',
-    '/logout',
-    '/privacy',
-    '/change-password',
-  ];
-  const authRequired = !publicPages.includes(to.path);
-  const auth = useAuthStore();
 
-  if (authRequired && !auth.user) {
-    // auth.returnUrl = to.fullPath
-    /// sessionStorage.setItem("returnUrl", to.fullPath)
-    return '/login';
+// 라우터 가드를 설정하여 인증이 필요한 페이지에 접근하기 전에 인증 상태를 확인합니다.
+//publicPage는 인증이 필요하지 않은 페이지
+router.beforeEach((to, from, next) => {
+  const auth = useAuthStore();
+  if (to.matched.some(record => record.meta.requiresAuth) && !auth.isAuthenticated) {
+    // 이 라우트는 인증이 필요하며, 사용자가 로그인하지 않았으므로 로그인 페이지로 리다이렉션
+    next('/login');
+  } else {
+    // 이 라우트는 인증이 필요하지 않거나, 사용자가 이미 인증되었음.
+    next();
   }
 });
+
