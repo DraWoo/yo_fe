@@ -40,8 +40,11 @@ export const router = createRouter({
       meta: { requiresAuth: false },
     },
     {
-      path: '/posts',
-      component: () => import('@/components/board/CreatePostView.vue'),
+      path: '/write',
+      component: () => import('@/components/board/CreatePostView.vue')
+        .catch((error) => {
+          console.error('Failed to load CreatePostView component', error)
+        }),
       meta: { requiresAuth: true },
     },
 

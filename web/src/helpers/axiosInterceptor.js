@@ -11,37 +11,42 @@ import { useAuthStore } from '@/stores'
 
 const setup = () => {
   const authStore = useAuthStore()
-  const token = localStorage.getItem('token')
-  if (token) {
-    authStore.token = token
+  const initialToken = localStorage.getItem('token')
+
+  if (initialToken) {
+    authStore.token = initialToken
     authStore.isAuthenticated = true
   }
 
-  //axios.js 가지고와서 사용
+  //요청 인터셉터
   instance.interceptors.request.use(
-    async (config) => {
+    (config) => {
       const token = authStore.token
       if (token) {
         config.headers['Authorization'] = `Bearer ${token}`
       }
+      console.log(config.headers['Authorization'])
       return config
     },
     (error) => Promise.reject(error)
   )
 
+  //응답 인터셉터
   instance.interceptors.response.use(
-    (res) => {
-      return res
-    },
+    (res) => res,
     async (error) => {
       const errorRes = error.response
-      const authStore = useAuthStore()
-      // const errorAPI = error.response?.config
 
-      // 기획상 403인 경우 로그아웃 시킴.
+      if (errorRes?.status === 401) {
+        console.error('Authentication error:', error);
+      }
+
       if (errorRes?.status === 403) {
-        await authStore.logout()
-        // await router.push('/logout')
+        try {
+          await authStore.logout()
+        } catch (logoutError) {
+          console.error('Error during logout:', logoutError);
+        }
         return Promise.reject(errorRes?.data?.payload?.message || error)
       }
 

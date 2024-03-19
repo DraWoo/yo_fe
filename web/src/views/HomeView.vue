@@ -15,7 +15,8 @@ const handleLogout = async () => {
 }
 //게시글 작성
 const handleCreatePost = () => {
-  router.push('/write')
+  console.log('###클릭####')
+  router.push('/posts')
 }
 // 컴포넌트 마운트 시 데이터 로드
 onMounted(() => {
