@@ -6,7 +6,8 @@ const baseUrl = `${import.meta.env.VITE_API_PATH}`
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     token: null,
-    isAuthenticated: false //상태 변수 => 사용자가 로그인했는지 여부를 나타탬
+    isAuthenticated: false, //상태 변수 => 사용자가 로그인했는지 여부를 나타탬
+    userIsActive: true //사용자 활동 상태를 추적하는 변수
   }),
   // getters는 계산된 상태를 반환하는 함수들의 집합
   //스토어 상태에 기반하여 동적으로 정보를 제공하며, Vue 컴포넌트 내에서 반응형 데이터처럼 사용
@@ -21,7 +22,32 @@ export const useAuthStore = defineStore('auth', {
   },
 
   actions: {
+    /**
+    * 애플리케이션 초기화 시 호출되어 사용자의 인증 상태를 초기화
+    * localStorage에서 토큰을 읽어와 상태를 설정
+    */
+    // initializeAuth() {
+    //   const initialToken = localStorage.getItem('token')
+    //   if (initialToken) {
+    //     this.token = initialToken
+    //     this.isAuthenticated = true
+    //     //사용자에게 자동 로그인 되었음을 알림
+    //     console.log('사용자가 자동으로 로그인 되었습니다.')
+    //   }
+    // },
 
+    /**
+     * 사용자 활동에 기반한 세션 타임아웃 로직
+     */
+    startSessionTimeout() {
+      const timeout = 1800000; // 30분
+      setTimeout(() => {
+        if (!this.userIsActive) {
+          this.logout()
+          alert('세션 시간이 만료되었습니다. 다시 로그인 해주세요.')
+        }
+      }, timeout)
+    },
     /**
      * 로그인 (token)
      * @param {String} username 사용자 아이디
@@ -40,21 +66,23 @@ export const useAuthStore = defineStore('auth', {
         })
         const { code, payload } = res.data
 
+        console.log("응답확인")
         if (code === 'succeed' && payload) {
           //응답데이터 토큰값 jwt
           this.token = payload.jwt
           this.isAuthenticated = true
           localStorage.setItem('token', this.token)
-          console.log('토큰 저장', this.token)
+          localStorage.setItem('username', username)
+          console.log('로그인 성공, 토큰 저장:', this.token)
           return payload
         } else {
-          //서버로 부터 응답 실패
-          throw new Error(res.data.data?.payload?.message || '로그인 실패')
+          // code가 'succeed'가 아니거나 payload가 없는 경우 실패로 간주합니다.
+          throw new Error('로그인 실패');
         }
       } catch (error) {
-        //네트워크 에러 또는 서버에러
-        console.error('로그인 에러:', error)
-        throw error.res ? error.res.data : new Error('Network error')
+        console.error('로그인 에러:', error);
+        // 서버 응답의 에러 메시지를 확인하고 출력합니다.
+        throw new Error(error.response?.data?.message || 'Network error');
       }
     },
 
@@ -91,12 +119,32 @@ export const useAuthStore = defineStore('auth', {
      * 사용자의 localStorage에서 토큰을 제거하고, 사용자 인증 상태 업데이트
      * 로그아웃이 성공하면, 사용자를 로그인 페이지로 리다이렉트
      */
-    async logout() {
-      //토큰 제거와 인증 상태 업데이트 
-      console.log('토큰 확인:', localStorage.getItem('token'))
+    async logout(router) {
+      const token = localStorage.getItem('token')
+      console.log('토큰 확인:', token)
+
+      if (token) {
+        try {
+          const response = await axios.post(`${baseUrl}/auth/logout`, {}, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          })
+
+          if (response.status === 200) {
+            console.log('로그아웃 성공')
+          } else {
+            console.error('로그아웃 실패:', response.data)
+          }
+        } catch (error) {
+          console.error('로그아웃 요청 중 오류 발생:', error)
+        }
+      }
+
+      // 로컬 스토리지에서 토큰 제거 및 인증 상태 업데이트
       localStorage.removeItem('token')
-      console.log('토큰 삭제 완료:', localStorage.getItem('token'))
       this.isAuthenticated = false
+
+      // 로그인 페이지로 리다이렉트
+      router.push('/login')
     },
   }
 })

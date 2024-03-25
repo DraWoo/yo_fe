@@ -37,19 +37,36 @@ const setup = () => {
     async (error) => {
       const errorRes = error.response
 
+      // 401 상태 코드는 일반적으로 인증 토큰이 만료되었거나 유효하지 않음을 나타냄
       if (errorRes?.status === 401) {
-        console.error('Authentication error:', error);
+        console.error('Authentication error:', error)
+        try {
+          // authStore의 refreshToken 메소드를 호출하여 새로운 토큰을 요청합니다.
+          const refreshedToken = await authStore.refreshToken()
+          authStore.token = refreshedToken;
+          localStorage.setItem('token', refreshedToken)
+
+          // 새로운 토큰으로 현재 요청을 재시도합니다.
+          console.log('새로운 토큰으로 요청을 재시도합니다.')
+          return instance(error.config)
+        } catch (refreshError) {
+          // 토큰 갱신에 실패한 경우 사용자를 로그아웃 처리합니다.
+          await authStore.logout()
+          console.error('새로운 토큰 발급 실패:', refreshError)
+          return Promise.reject(refreshError)
+        }
       }
 
       if (errorRes?.status === 403) {
+        // 403 상태 코드는 일반적으로 사용자 권한이 충분하지 않음을 나타냅니다.
         try {
           await authStore.logout()
+          console.log('권한이 충분하지 않습니다. 로그아웃 처리되었습니다.')
         } catch (logoutError) {
-          console.error('Error during logout:', logoutError);
+          console.error('로그아웃 처리 중 에러 발생:', logoutError)
         }
         return Promise.reject(errorRes?.data?.payload?.message || error)
       }
-
       return Promise.reject(error.response?.data?.payload?.message || error)
     }
   )

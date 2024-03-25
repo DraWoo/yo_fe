@@ -2,21 +2,31 @@
 import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/index.js'
 import { useRouter } from 'vue-router'
+import CreatePostModal from '@/components/boards/CreatePostModal.vue' // 자식 컴포넌트 import 경로 확인 필요
 
 const $authStore = useAuthStore()
 const router = useRouter()
+const showModal = ref(false) // 모달 상태를 관리하는 반응형 참조
 
+//사용자 이름을 가지고옴
+const username = localStorage.username 
+// 사용자 이름을 Pinia 스토어에서 가져옵니다.
+// const username = $authStore.username
+
+console.log("ddddddddddddddddddd",username)
 // 가상의 게시글 데이터
 const posts = ref([])
 
 const handleLogout = async () => {
-    await $authStore.logout()
-    router.push('/login')
+  await $authStore.logout(router)
 }
-//게시글 작성
+// 글작성 모달을 표시하는 함수
 const handleCreatePost = () => {
-  console.log('###클릭####')
-  router.push('/posts')
+  showModal.value = true // 모달을 표시하도록 상태를 true로 설정
+}
+// 모달 상태 제어 함수
+const toggleModal = () => {
+  showModal.value = !showModal.value
 }
 // 컴포넌트 마운트 시 데이터 로드
 onMounted(() => {
@@ -51,6 +61,11 @@ onMounted(() => {
         <button class="py-2 px-4 bg-blue-500 text-white rounded" @click="handleCreatePost">
           작성
         </button>
+        <CreatePostModal
+          :is-visible="showModal"
+          :username="username"
+          @toggle="toggleModal"
+        />
         <div>
           <input 
             type="text" 

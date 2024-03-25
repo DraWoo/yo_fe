@@ -47,7 +47,9 @@ async function onSubmit(values, { setErrors }) {
   try {
     await $authStore.login(values.username, values.password)
     console.log('🔑 로그인 성공! 메인 페이지로 이동합니다.'); // 성공 로그
-    await router.push($authStore.getUserMainPage)
+
+    const redirectUrl = localStorage.getItem('redirectUrl') || '/home'
+    await router.push(redirectUrl)
     console.log('페이지 이동 완료')
   } catch (error) {
     if (setErrors) {

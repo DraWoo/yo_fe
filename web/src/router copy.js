@@ -41,7 +41,7 @@ export const router = createRouter({
     },
     {
       path: '/write',
-      component: () => import('@/components/board/CreatePostView.vue')
+      component: () => import('@/components/boards/CreatePostView.vue')
         .catch((error) => {
           console.error('Failed to load CreatePostView component', error)
         }),

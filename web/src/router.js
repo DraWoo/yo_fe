@@ -41,7 +41,7 @@ export const router = createRouter({
     },
     {
       path: '/posts',
-      component: () => import('@/components/board/CreatePostView.vue'),
+      component: () => import('@/components/boards/CreatePostModal.vue'),
       meta: { requiresAuth: true },
     },
 

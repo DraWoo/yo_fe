@@ -23,29 +23,34 @@ export const useBoardStore = defineStore('board', {
 
         //localhost:9010/api/boards/posts
         async createPost(postData) {
-            console.log('data check::: ', { postData })
+            console.log("요청", postData)
             try {
+                const token = localStorage.getItem('token'); // 로컬 스토리지에서 토큰을 가져옵니다.
+                console.log("요청", token)
+                if (!token) {
+                    throw new Error('인증 토큰이 없습니다. 로그인이 필요합니다.');
+                }
 
-                //게시물 작성 api 요청 
-                const res = await axios.post(`${baseUrl}/boards/posts`, postData)
+                const res = await axios.post(`${baseUrl}/boards/posts`, postData, {
+                    headers: {
+                        'Authorization': `Bearer ${token}` // 인증 토큰을 헤더에 포함합니다.
+                    }
+                });
 
-                const { code, payload } = res.data
+                const { code, payload } = res.data;
 
                 if (code === 'succeed' && payload) {
-                    // 게시글 작성이 성공했을 때의 처리를 작성합니다.
-                    console.log('게시글 작성 성공', res.data)
-                    // 성공 시 게시글 목록 상태를 업데이트할 수 있습니다.
-                    this.posts.push(res.data)
+                    console.log('게시글 작성 성공', payload);
+                    this.posts.push(payload);
                 } else {
-                    // 요청이 성공적이지 않으면 오류를 발생시킵니다.
                     throw new Error('게시글 작성에 실패했습니다.');
                 }
             } catch (error) {
-                // 요청이 실패했을 때의 오류 처리를 작성합니다.
                 console.error('게시글 작성 에러:', error);
                 throw error;
             }
         },
+
     }
 
 })
